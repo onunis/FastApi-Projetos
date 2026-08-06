@@ -16,6 +16,7 @@ class Book:
         self.description = description
         self.rating = rating
 
+
 BOOKS = []
 
 @app.get("/books")
