@@ -19,11 +19,11 @@ class Book:
 
 
 class BookRequest(BaseModel):
-    id: int  #Type Hints
-    title: str
-    author: str
-    description: str
-    rating: int
+    id: int  
+    title: str = Field(min_length=3)
+    author: str = Field(min_length=1)
+    description: str = Field(min_length=1, max_length=100)
+    rating: int = Field(gt=0, lt=6)
 
 BOOKS = [
     Book(1, "Tudo e Rio", "Carla Madeira", "Um livro muito bom", 5),
