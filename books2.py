@@ -18,6 +18,13 @@ class Book:
         self.rating = rating
 
 
+class BookRequest(BaseModel):
+    id: int  #Type Hints
+    title: str
+    author: str
+    description: str
+    rating: int
+
 BOOKS = [
     Book(1, "Tudo e Rio", "Carla Madeira", "Um livro muito bom", 5),
     Book(2, "jujutsu kaisen", "Mangaka random", "Um livro muito bom", 5),
