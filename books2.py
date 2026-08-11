@@ -40,6 +40,13 @@ async def real_all_books():
     return BOOKS
 
 
+@app.get("/books/{book_id}")
+async def book_id(book_id: int):
+    for book in BOOKS:
+        if book.id == book_id:
+            return book
+        
+
 @app.post("/create-book")
 async def create_book(book_request: BookRequest):
     new_book = Book(**book_request.model_dump())
@@ -48,7 +55,7 @@ async def create_book(book_request: BookRequest):
 
 def find_book_id(book: Book):
     book.id = 1 if len(BOOKS) == 0 else BOOKS[-1].id + 1
-    
+
     # if len(BOOKS) > 0:
     #     book.id = BOOKS[-1].id + 1
     # else:
