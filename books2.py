@@ -10,13 +10,15 @@ class Book:
     author: str
     description: str
     rating: int
+    published_date: int
 
-    def __init__(self, id, title, author, description, rating):
+    def __init__(self, id, title, author, description, rating, published_date):
         self.id = id
         self.title = title
         self.author = author
         self.description = description
         self.rating = rating
+        self.published_date = published_date
 
 
 class BookRequest(BaseModel):
@@ -25,19 +27,29 @@ class BookRequest(BaseModel):
     author: str = Field(min_length=1)
     description: str = Field(min_length=1, max_length=100)
     rating: int = Field(gt=0, lt=6)
+    published_date: int = Field(lt=2027)
 
 BOOKS = [
-    Book(1, "Tudo e Rio", "Carla Madeira", "Um livro muito bom", 5),
-    Book(2, "jujutsu kaisen", "Mangaka random", "Um livro muito bom", 5),
-    Book(3, "A Natureza da Mordida", "Carla Madeira", "Um livro bom", 4),
-    Book(4, "CS Pro", "Coding with Ruby", "Um livro muito bom", 3),
-    Book(5, "HP2", "Author 1", "Um livro muito bom", 2),
-    Book(6, "HP1", "Author 2", "Um livro muito bom", 1)
+    Book(1, "Tudo e Rio", "Carla Madeira", "Um livro muito bom", 5, 2025),
+    Book(2, "jujutsu kaisen", "Mangaka random", "Um livro muito bom", 5, 2021),
+    Book(3, "A Natureza da Mordida", "Carla Madeira", "Um livro bom", 4, 2023),
+    Book(4, "CS Pro", "Coding with Ruby", "Um livro muito bom", 3, 2023),
+    Book(5, "HP2", "Author 1", "Um livro muito bom", 2, 2022),
+    Book(6, "HP1", "Author 2", "Um livro muito bom", 1, 1999)
 ]
 
 @app.get("/books")
 async def real_all_books():
     return BOOKS
+
+@app.get("/books/bydate")
+async def book_by_date(book_date: int):
+    books_to_return = []
+    for book in BOOKS:
+        if book.published_date == book_date:
+            books_to_return.append(book)
+
+    return books_to_return
 
 
 @app.get("/books/{book_id}")
