@@ -27,7 +27,7 @@ class BookRequest(BaseModel):
     author: str = Field(min_length=1)
     description: str = Field(min_length=1, max_length=100)
     rating: int = Field(gt=0, lt=6)
-    published_date: int = Field(lt=2027)
+    published_date: int = Field(gt=1999, lt=2031)
 
 BOOKS = [
     Book(1, "Tudo e Rio", "Carla Madeira", "Um livro muito bom", 5, 2025),
@@ -42,23 +42,12 @@ BOOKS = [
 async def real_all_books():
     return BOOKS
 
-@app.get("/books/bydate")
-async def book_by_date(book_date: int):
-    books_to_return = []
-    for book in BOOKS:
-        if book.published_date == book_date:
-            books_to_return.append(book)
-
-    return books_to_return
-
-
 @app.get("/books/{book_id}")
 async def book_id(book_id: int):
     for book in BOOKS:
         if book.id == book_id:
             return book
         
-
 @app.get("/books/")
 async def books_by_rating(book_rating: int):
     books_to_return = []
@@ -68,6 +57,14 @@ async def books_by_rating(book_rating: int):
 
     return books_to_return
 
+@app.get("/books/publish/")
+async def book_by_date(published_date: int):
+    books_to_return = []
+    for book in BOOKS:
+        if book.published_date == published_date:
+            books_to_return.append(book)
+
+    return books_to_return
 
 @app.post("/create-book")
 async def create_book(book_request: BookRequest):
