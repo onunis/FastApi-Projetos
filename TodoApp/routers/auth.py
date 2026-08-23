@@ -27,7 +27,7 @@ async def create_user(create_user_request: CreateUserRequest):
     email=create_user_request.email,
     first_name=create_user_request.first_name,
     last_name=create_user_request.last_name,
-    hashed_password=create_user_request.password,
+    hashed_password=bcrypt_context.hash(create_user_request.password),
     role=create_user_request.role,
     is_active=True,
      
