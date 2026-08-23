@@ -4,6 +4,7 @@ from models import Users
 from passlib.context import CryptContext
 
 
+
 router = APIRouter()
 
 bcrypt_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
