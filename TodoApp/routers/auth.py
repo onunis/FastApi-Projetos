@@ -1,4 +1,7 @@
-from fastapi import APIRouter
+from typing import Annotated
+from fastapi import APIRouter, Depends
+from sqlalchemy.orm import Session
+from database import SessionLocal
 from pydantic import BaseModel
 from models import Users
 from passlib.context import CryptContext
@@ -8,6 +11,17 @@ from passlib.context import CryptContext
 router = APIRouter()
 
 bcrypt_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
+
+def get_db():
+    db = SessionLocal()
+    try:
+        yield db
+    finally:
+        db.close()
+
+
+
+db_dependency = Annotated[Session, Depends(get_db)]
 
 class CreateUserRequest(BaseModel):
 
