@@ -5,7 +5,7 @@ from database import SessionLocal
 from pydantic import BaseModel
 from models import Users
 from passlib.context import CryptContext
-
+from starlette import status
 
 
 router = APIRouter()
@@ -33,7 +33,7 @@ class CreateUserRequest(BaseModel):
     role: str
 
 
-@router.post("/auth")
+@router.post("/auth", status_code=status.HTTP_201_CREATED)
 async def create_user(create_user_request: CreateUserRequest):
     create_user_model = Users(
 
