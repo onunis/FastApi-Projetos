@@ -66,4 +66,8 @@ async def login_for_acess_token(
     form_data: Annotated[OAuth2PasswordRequestForm, Depends()],
     db: db_dependency):
 
-    return form_data.username
+    user = authenticated_user(form_data.username, form_data.password, db)
+    if not user:
+        return "Failed Authentication"
+    return "Successful Authentication"
+
