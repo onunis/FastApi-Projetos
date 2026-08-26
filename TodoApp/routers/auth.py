@@ -1,3 +1,4 @@
+from datetime import timedelta, datetime, timezone
 from typing import Annotated
 from fastapi import APIRouter, Depends
 from sqlalchemy.orm import Session
@@ -35,6 +36,15 @@ def authenticated_user(username: str, password: str, db):
     if not bcrypt_context.verify(password, user.hashed_password):
         return False
     return user
+
+def create_acees_token(username:str, user_id: int, expires_delta: timedelta):
+    encode = {"sub": username, "id": user_id}
+    expires = datetime.now(timezone.utc) + expires_delta
+    encode.update({"exp": expires})
+
+
+    #funcao que realmente ativa o token jutando header/payload/assinatura
+    return jwt.encode(encode, SECRET_KEY, algorithm=ALGORITHM)
 
 
 class CreateUserRequest(BaseModel):
