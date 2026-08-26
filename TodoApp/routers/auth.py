@@ -37,6 +37,7 @@ def authenticated_user(username: str, password: str, db):
         return False
     return user
 
+
 def create_acees_token(username:str, user_id: int, expires_delta: timedelta):
     encode = {"sub": username, "id": user_id}
     expires = datetime.now(timezone.utc) + expires_delta
