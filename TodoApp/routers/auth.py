@@ -7,9 +7,13 @@ from models import Users
 from passlib.context import CryptContext
 from starlette import status
 from fastapi.security import OAuth2PasswordRequestForm
-
+from jose import jwt
 
 router = APIRouter()
+
+SECRET_KEY = '951b344f8740d9a91209adea452f83e2a4d8e662cc6cf84cee81ef345a02290d'
+ALGORITHM = 'HS256'
+
 
 bcrypt_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
