@@ -1,6 +1,6 @@
 from datetime import timedelta, datetime, timezone
 from typing import Annotated
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
 from database import SessionLocal
 from pydantic import BaseModel
@@ -8,7 +8,7 @@ from models import Users
 from passlib.context import CryptContext
 from starlette import status
 from fastapi.security import OAuth2PasswordRequestForm, OAuth2PasswordBearer
-from jose import jwt
+from jose import jwt, JWTError
 
 router = APIRouter()
 
@@ -45,9 +45,24 @@ def create_acees_token(username:str, user_id: int, expires_delta: timedelta):
     expires = datetime.now(timezone.utc) + expires_delta
     encode.update({"exp": expires})
 
-
     #funcao que realmente ativa o token jutando header/payload/assinatura
     return jwt.encode(encode, SECRET_KEY, algorithm=ALGORITHM)
+
+async def get_current_user(token: Annotated[str, Depends(oauth2_bearer)]):
+        try:
+            payload = jwt.encode(token, SECRET_KEY, algorithm=[ALGORITHM])
+            username: str = payload.get("sub")
+            user_id: int = payload.get("id")
+            if username is None or user_id is None:
+                raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Could not validate user.")
+            return {"username":username, "id": user_id}
+        except JWTError:
+            
+
+
+
+
+
 
 
 class CreateUserRequest(BaseModel):
