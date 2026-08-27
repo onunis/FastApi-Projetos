@@ -7,7 +7,7 @@ from pydantic import BaseModel
 from models import Users
 from passlib.context import CryptContext
 from starlette import status
-from fastapi.security import OAuth2PasswordRequestForm
+from fastapi.security import OAuth2PasswordRequestForm, OAuth2PasswordBearer
 from jose import jwt
 
 router = APIRouter()
@@ -17,6 +17,9 @@ ALGORITHM = 'HS256'
 
 
 bcrypt_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
+oauth2_bearer = OAuth2PasswordBearer(TokenUrl="token")
+
+
 
 def get_db():
     db = SessionLocal()
@@ -24,7 +27,6 @@ def get_db():
         yield db
     finally:
         db.close()
-
 
 
 db_dependency = Annotated[Session, Depends(get_db)]
