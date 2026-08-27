@@ -104,7 +104,7 @@ async def login_for_acess_token(
 
     user = authenticated_user(form_data.username, form_data.password, db)
     if not user:
-        return "Failed Authentication"
+        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Could not validate user.")
 
     token = create_acees_token(user.username, user.id, timedelta(minutes=20))
     return {"acess_token": token, "token_type": "Bearer"}
