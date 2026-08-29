@@ -42,8 +42,8 @@ def authenticated_user(username: str, password: str, db):
     return user
 
 
-def create_access_token(username:str, user_id: int, expires_delta: timedelta):
-    encode = {"sub": username, "id": user_id}
+def create_access_token(username:str, user_id: int, role: str, expires_delta: timedelta):
+    encode = {"sub": username, "id": user_id, "role": role}
     expires = datetime.now(timezone.utc) + expires_delta
     encode.update({"exp": expires})
 
@@ -105,6 +105,6 @@ async def login_for_access_token(
     if not user:
         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Could not validate user.")
 
-    token = create_access_token(user.username, user.id, timedelta(minutes=20))
+    token = create_access_token(user.username, user.id, user.role, timedelta(minutes=20))
     return {"access_token": token, "token_type": "Bearer"}
 
