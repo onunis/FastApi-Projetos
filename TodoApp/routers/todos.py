@@ -39,7 +39,7 @@ async def read_todo(user: user_dependency, db: db_dependency, todo_id: int = Pat
     if user is None:
             return HTTPException(status_code=401, detail="Authentication Failed")
     
-    todo_model = db.query(Todos).filter(Todos.id == todo_id).first()
+    todo_model = db.query(Todos).filter(Todos.id == todo_id).filter(Todos.owner_id == user.get("id"))
     if todo_model is not None:
         return todo_model
     raise HTTPException(status_code=404, detail="Id not found")
