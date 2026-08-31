@@ -23,6 +23,7 @@ def get_db():
 db_dependency = Annotated[Session, Depends(get_db)]
 user_dependency = Annotated[dict, Depends(get_current_user)]
 
+
 @router.get("/", status_code=status.HTTP_200_OK)
 async def get_user_info(user: user_dependency, db: db_dependency):
     if user is None:
@@ -31,3 +32,4 @@ async def get_user_info(user: user_dependency, db: db_dependency):
     if user_model is not None:
         return user_model
     raise HTTPException(status_code=404, detail="User not Found")
+
