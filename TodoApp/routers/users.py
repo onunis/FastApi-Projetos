@@ -26,6 +26,11 @@ user_dependency = Annotated[dict, Depends(get_current_user)]
 bcrypt_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
 
+class UserVerification(BaseModel):
+    password: str
+    new_password: str = Field(min_length=6)
+    
+
 @router.get("/", status_code=status.HTTP_200_OK)
 async def get_user_info(user: user_dependency, db: db_dependency):
     if user is None:
