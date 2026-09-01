@@ -30,10 +30,7 @@ bcrypt_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 async def get_user_info(user: user_dependency, db: db_dependency):
     if user is None:
         raise HTTPException(status_code=401, detail="Authentication Failed")
-    user_model = db.query(Users).filter(Users.id == user.get("id")).first()
-    if user_model is not None:
-        return user_model
-    raise HTTPException(status_code=404, detail="User not Found")
+    return db.query(Users).filter(Users.id == user.get("id")).first()
 
 
     
