@@ -52,7 +52,7 @@ async def change_password(user: user_dependency, db: db_dependency, user_verific
     db.commit()
 
 
-@router.put("/phone_number", status_code=status.HTTP_204_NO_CONTENT)
+@router.put("/phone_number/{phone_number}", status_code=status.HTTP_204_NO_CONTENT)
 async def update_phone_number(user: user_dependency, db: db_dependency, phone_number: str):
     if user is None:
         raise HTTPException(status_code=401, detail="Authentication Failed")
