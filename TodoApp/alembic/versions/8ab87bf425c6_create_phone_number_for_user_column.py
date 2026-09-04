@@ -22,5 +22,4 @@ def upgrade() -> None:
     op.add_column('users', sa.Column('phone_number', sa.String(), nullable=True))
 
 def downgrade() -> None:
-    """Downgrade schema."""
-    pass
+    op.drop_column('users', 'phone_number')
