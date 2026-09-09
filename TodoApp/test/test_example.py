@@ -8,3 +8,9 @@ class Student:
         self.years = years
 
 
+def test_person_initialization():
+    p  = Student("John","Doe","Computer Science", 3)
+    assert p.first_name == "John", "First name should be John"
+    assert p.last_name == "Doe", "Last name should be Doe"
+    assert p.major == "Computer Science"
+    assert p.years == 3
