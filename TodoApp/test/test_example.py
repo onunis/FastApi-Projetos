@@ -11,9 +11,8 @@ class Student:
 def default_employee():
     return Student("John","Doe","Computer Science", 3)
 
-def test_person_initialization():
-    p  = Student("John","Doe","Computer Science", 3)
-    assert p.first_name == "John", "First name should be John"
-    assert p.last_name == "Doe", "Last name should be Doe"
-    assert p.major == "Computer Science"
-    assert p.years == 3
+def test_person_initialization(default_employee):
+    assert default_employee.first_name == "John", "First name should be John"
+    assert default_employee.last_name == "Doe", "Last name should be Doe"
+    assert default_employee.major == "Computer Science"
+    assert default_employee.years == 3
