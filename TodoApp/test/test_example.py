@@ -7,6 +7,9 @@ class Student:
         self.major = major
         self.years = years
 
+@pytest.fixture
+def default_employee():
+    return Student("John","Doe","Computer Science", 3)
 
 def test_person_initialization():
     p  = Student("John","Doe","Computer Science", 3)
