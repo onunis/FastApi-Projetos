@@ -7,7 +7,7 @@ app = FastAPI()
 
 @app.get("/healthy")
 def health_check():
-    return {'status': 'healthy'}
+    return {'status': 'Healthy'}
 
 
 models.Base.metadata.create_all(bind=engine)
