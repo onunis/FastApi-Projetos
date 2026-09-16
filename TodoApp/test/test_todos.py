@@ -6,6 +6,8 @@ from main import app
 from routers.todos import get_db, get_current_user
 from fastapi.testclient import TestClient
 from fastapi import status
+import pytest
+from models import Todos
 
 SQLALCHEMY_DATABASE_URL = "sqlite:///./testdb.db"
 
