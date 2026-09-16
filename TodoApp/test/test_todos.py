@@ -38,7 +38,7 @@ client = TestClient(app)
 def test_todo():
     todo = Todos(
         title="Learn to code!",
-        description="Need to leran everyday!",
+        description="Need to learn everyday!",
         priority=5,
         complete=False,
         owner_id=1,
@@ -52,8 +52,17 @@ def test_todo():
         connection.execute(text("DELETE FROM todos;"))
         connection.commit()
 
-def test_read_all_authenticated():
+def test_read_all_authenticated(test_todo):
     response = client.get("/")
     assert response.status_code == status.HTTP_200_OK
-    assert response.json() == []
+    assert response.json() == [
+        {
+            'title': "Learn to code!",
+            'description': "Need to learn everyday!",
+            'priority':5,
+            'complete': False,
+            'id':1,
+            'owner_id':1
+        }
+    ]
 
