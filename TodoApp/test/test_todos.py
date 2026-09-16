@@ -1,8 +1,9 @@
 from sqlalchemy import create_engine
 from sqlalchemy.pool import StaticPool
 from sqlalchemy.orm import sessionmaker
-from database import Base
-from main import app
+from ..database import Base
+from ..main import app
+from ..routers.todos import get_db
 
 SQLALCHEMY_DATABASE_URL = "sqlite:///./testdb.db"
 
