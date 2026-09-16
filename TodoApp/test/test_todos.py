@@ -35,3 +35,5 @@ client = TestClient(app)
 def test_read_all_authenticated():
     response = client.get("/")
     assert response.status_code == status.HTTP_200_OK
+    assert response.json() == []
+
