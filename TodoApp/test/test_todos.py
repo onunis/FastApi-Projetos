@@ -3,7 +3,7 @@ from sqlalchemy.pool import StaticPool
 from sqlalchemy.orm import sessionmaker
 from ..database import Base
 from ..main import app
-from ..routers.todos import get_db
+from ..routers.todos import get_db, get_current_user
 
 SQLALCHEMY_DATABASE_URL = "sqlite:///./testdb.db"
 
@@ -22,4 +22,8 @@ def override_get_db():
     finally:
         db.close()
 
+def override_get_current_user():
+    return {"username": "drakezinho", "id": 1, "user_role": "admin"}
+
 app.dependency_overrides[get_db] = override_get_db
+app.dependency_overrides[get_current_user] = override_get_current_user
