@@ -80,3 +80,10 @@ def test_read_one_authenticated(test_todo):
             'owner_id':1
         }
 
+
+def test_read_one_not_authenticated(test_todo):
+    response = client.get("/todo/999")
+
+    assert response.status_code == status.HTTP_404_NOT_FOUND
+    assert response.json() == {"detail": "Todo not found"}
+
