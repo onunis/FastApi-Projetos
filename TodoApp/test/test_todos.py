@@ -109,3 +109,21 @@ def test_create_todo(test_todo):
     assert model.priority == request_data.get("priority")
     assert model.complete == request_data.get("complete")
 
+
+def test_update_todo(test_todo):
+    request_data = {
+        "title": "Change the title of the todo already saved",
+        "description": "Need to learn everyday!",
+        "priority": 5,
+        "complete": False
+    }
+
+    response = client.put("/todo/1", json=request_data)
+
+    assert response.status_code == status.HTTP_204_NO_CONTENT
+
+    db = TestingSessionLocal()
+    model = db.query(Todos).filter(Todos.id == 1).first()
+
+    assert model.title == "Change the title of the todo already saved"
+
