@@ -127,3 +127,17 @@ def test_update_todo(test_todo):
 
     assert model.title == "Change the title of the todo already saved"
 
+
+def test_update_todo_not_found():
+    request_data = {
+        "title": "Change the title of the todo already saved",
+        "description": "Need to learn everyday!",
+        "priority": 5,
+        "complete": False
+    }
+
+    response = client.put("/todo/999", json=request_data)
+
+    assert response.status_code == status.HTTP_404_NOT_FOUND
+    assert response.json() == {"detail": "Todo not found"}
+
