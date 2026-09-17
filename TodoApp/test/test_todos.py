@@ -66,3 +66,17 @@ def test_read_all_authenticated(test_todo):
         }
     ]
 
+
+def test_read_one_authenticated(test_todo):
+    response = client.get("/todo/1")
+
+    assert response.status_code == status.HTTP_200_OK
+    assert response.json() == {
+            'title': "Learn to code!",
+            'description': "Need to learn everyday!",
+            'priority':5,
+            'complete': False,
+            'id':1,
+            'owner_id':1
+        }
+
