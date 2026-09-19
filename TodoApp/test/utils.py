@@ -58,7 +58,7 @@ def test_todo():
 def test_user():
     user = Users(
         username="drakezinho",
-        enail="drakezin@email.com",
+        email="drakezin@email.com",
         first_name="Guilherme",
         last_name="Nunes",
         hashed_password=bcrypt_context.hash("testpassword"),
