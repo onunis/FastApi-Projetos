@@ -68,7 +68,7 @@ def test_user():
 
     db = TestingSessionLocal()
     db.add(user)
-    db.commit
+    db.commit()
     yield user
     with engine.connect() as connection:
         connection.execute(text("DELETE FROM users;"))
