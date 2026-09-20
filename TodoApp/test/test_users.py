@@ -17,3 +17,14 @@ def test_return_user(test_user):
     assert response.json()["role"] == "admin"
     assert response.json()["phone_number"] == "11111111"
 
+
+def test_change_password_success(test_user):
+    response = client.put(
+        "/users/password", json={
+            "password":"testpassword",
+            "new_password":"newpassword"
+        }
+    )
+
+    assert response.status_code == status.HTTP_204_NO_CONTENT
+
