@@ -1,4 +1,5 @@
 from database import Base
+from routers.todos import TodoStatus
 from sqlalchemy import Column, Integer, String, Boolean, ForeignKey
 
 
@@ -22,6 +23,6 @@ class Todos(Base):
     title = Column(String)
     description = Column(String)
     priority = Column(Integer)
-    complete = Column(Boolean, default=False)
+    status = Column(String, default="todo")
     owner_id = Column(Integer, ForeignKey("users.id"))
 
