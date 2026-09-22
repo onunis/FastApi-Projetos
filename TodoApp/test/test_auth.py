@@ -1,3 +1,5 @@
+
+from fastapi import HTTPException
 from jose import jwt
 from datetime import timedelta
 from .utils import *
@@ -90,3 +92,23 @@ async def test_get_current_user_valid_token():
         "id": 1,
         "user_role": "admin"
     }
+
+
+@pytest.mark.asyncio
+async def test_get_current_user_missing_payload():
+    encode = {
+        "role":"user"
+    }
+
+    token = jwt.encode(
+        encode,
+        SECRET_KEY,
+        algorithm=ALGORITHM        
+    )
+
+    with pytest.raises(HTTPException) as exc_info:
+        await get_current_user(token=token)
+
+    assert exc_info.value.status_code == 401
+    assert exc_info.value.detail == "Could not validate user."
+
