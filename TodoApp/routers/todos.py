@@ -1,4 +1,5 @@
 from typing import Annotated
+from enum import Enum
 from pydantic import BaseModel, Field
 from sqlalchemy.orm import Session
 from fastapi import APIRouter, Depends, HTTPException, Path
@@ -20,13 +21,17 @@ def get_db():
 db_dependency = Annotated[Session, Depends(get_db)]
 user_dependency = Annotated[dict, Depends(get_current_user)]
 
+class TodoStatus(str, Enum):
+    TODO = "todo"
+    IN_PROGRESS = "in_progress"
+    DONE = "done"
 
 class TodoRequest(BaseModel):
 
     title: str = Field(min_length=3)
     description: str = Field(min_length=3, max_length=100)
     priority: int = Field(gt=0, lt=6)
-    complete: bool
+    status: TodoStatus = TodoStatus.TODO
 
 
 @router.get("/", status_code=status.HTTP_200_OK)
