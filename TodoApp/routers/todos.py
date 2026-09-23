@@ -23,7 +23,7 @@ user_dependency = Annotated[dict, Depends(get_current_user)]
 
 class TodoStatusRequest(BaseModel):
     status: TodoStatus
-    
+
 
 class TodoStatus(str, Enum):
     TODO = "todo"
@@ -82,6 +82,27 @@ async def update_date(user: user_dependency, db: db_dependency, todo_request: To
     db.add(todo_model)
     db.commit()
 
+@router.patch("/todo/{todo_id}/status", status_code=status.HTTP_204_NO_CONTENT)
+async def update_todo_status(
+    user: user_dependency,
+    db: db_dependency, 
+    todo_status_request: TodoStatusRequest,
+    todo_id: int = Path(gt=0)
+    ):
+
+    if user is None:
+        raise HTTPException(status_code=401,detail="Authentication Failed")
+
+
+    todo_model = (db.query(Todos).filter(Todos.id == todo_id).filter(Todos.owner_id == user.get("id")).first())
+
+    if todo_model is None:
+        raise HTTPException(status_code=404, detail="Todo not found")
+
+    todo_model.status = todo_status_request.status
+
+    db.add(todo_model)
+    db.commit()
 
 @router.delete("/todo/{todo_id}", status_code=status.HTTP_204_NO_CONTENT)
 async def delete_todo(user: user_dependency, db: db_dependency, todo_id: int = Path(gt=0)):
