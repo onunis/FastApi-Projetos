@@ -41,7 +41,7 @@ def test_todo():
         title="Learn to code!",
         description="Need to learn everyday!",
         priority=5,
-        complete=False,
+        status="todo",
         owner_id=1,
     )
 
