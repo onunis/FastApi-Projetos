@@ -1,5 +1,4 @@
 from database import Base
-from routers.todos import TodoStatus
 from sqlalchemy import Column, Integer, String, Boolean, ForeignKey
 
 
