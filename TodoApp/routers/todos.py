@@ -73,7 +73,7 @@ async def update_date(user: user_dependency, db: db_dependency, todo_request: To
     todo_model.title = todo_request.title
     todo_model.description = todo_request.description
     todo_model.priority = todo_request.priority
-    todo_model.complete = todo_request.complete
+    todo_model.status = todo_request.status
 
     db.add(todo_model)
     db.commit()
