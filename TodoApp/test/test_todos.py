@@ -115,3 +115,19 @@ def test_delete_todo_not_found():
     assert response.status_code ==  status.HTTP_404_NOT_FOUND
     assert response.json() == {"detail": "Todo not found"}
 
+def test_update_todo_status(test_todo):
+    request_data = {
+        "status": "done"
+    }
+
+    response = client.patch(
+        "/todo/1/status",
+        json=request_data
+    )
+
+    assert response.status_code == status.HTTP_204_NO_CONTENT
+
+    db = TestingSessionLocal()
+    model = db.query(Todos).filter(Todos.id == 1).first()
+
+    assert model.status == "done"
