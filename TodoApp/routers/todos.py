@@ -21,6 +21,10 @@ def get_db():
 db_dependency = Annotated[Session, Depends(get_db)]
 user_dependency = Annotated[dict, Depends(get_current_user)]
 
+class TodoStatusRequest(BaseModel):
+    status: TodoStatus
+    
+
 class TodoStatus(str, Enum):
     TODO = "todo"
     IN_PROGRESS = "in_progress"

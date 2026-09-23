@@ -89,7 +89,7 @@ def test_update_todo_not_found():
         "title": "Change the title of the todo already saved",
         "description": "Need to learn everyday!",
         "priority": 5,
-        "complete": False
+        'status':'todo'
     }
 
     response = client.put("/todo/999", json=request_data)
