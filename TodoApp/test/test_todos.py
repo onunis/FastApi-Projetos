@@ -48,7 +48,7 @@ def test_create_todo(test_todo):
         "title": "New Todo!",
         "description": "New todo description",
         "priority": 5,
-        "complete": False
+        'status':'todo'
     }
 
     response = client.post("/todo", json=request_data)
@@ -62,7 +62,7 @@ def test_create_todo(test_todo):
     assert model.title == request_data.get("title")
     assert model.description == request_data.get("description")
     assert model.priority == request_data.get("priority")
-    assert model.complete == request_data.get("complete")
+    assert model.status == request_data.get("status")
 
 
 def test_update_todo(test_todo):
@@ -70,7 +70,7 @@ def test_update_todo(test_todo):
         "title": "Change the title of the todo already saved",
         "description": "Need to learn everyday!",
         "priority": 5,
-        "complete": False
+        "status":"in_progress"
     }
 
     response = client.put("/todo/1", json=request_data)
@@ -81,6 +81,7 @@ def test_update_todo(test_todo):
     model = db.query(Todos).filter(Todos.id == 1).first()
 
     assert model.title == "Change the title of the todo already saved"
+    assert model.status == "in_progress"
 
 
 def test_update_todo_not_found():
