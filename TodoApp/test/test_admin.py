@@ -16,7 +16,7 @@ def test_admin_real_all_authenticated(test_todo):
             'title': "Learn to code!",
             'description': "Need to learn everyday!",
             'priority':5,
-            'complete': False,
+            'status':'todo',
             'id':1,
             'owner_id':1
             }
