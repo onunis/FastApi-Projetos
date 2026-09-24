@@ -123,14 +123,12 @@ def test_delete_todo_not_found():
     assert response.json() == {"detail": "Todo not found"}
 
 def test_update_todo_status(test_todo):
-    request_data = {
-        "status": "done"
-    }
+    original_created_at = test_todo.created_at
+    original_updated_at = test_todo.updated_at
 
-    response = client.patch(
-        "/todo/1/status",
-        json=request_data
-    )
+    request_data = {"status": "done"}
+
+    response = client.patch("/todo/1/status",json=request_data)
 
     assert response.status_code == status.HTTP_204_NO_CONTENT
 
@@ -138,7 +136,8 @@ def test_update_todo_status(test_todo):
     model = db.query(Todos).filter(Todos.id == 1).first()
 
     assert model.status == "done"
-
+    assert model.updated_at > original_updated_at
+    assert model.created_at == original_created_at
 
 def test_update_todo_status_not_found():
     request_data = {
