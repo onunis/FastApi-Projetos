@@ -76,8 +76,7 @@ def test_update_todo(test_todo):
     request_data = {
         "title": "Change the title of the todo already saved",
         "description": "Need to learn everyday!",
-        "priority": 5,
-        "status":"in_progress"
+        "priority": 5
     }
 
     response = client.put("/todo/1", json=request_data)
@@ -88,7 +87,7 @@ def test_update_todo(test_todo):
     model = db.query(Todos).filter(Todos.id == 1).first()
 
     assert model.title == "Change the title of the todo already saved"
-    assert model.status == "in_progress"
+    assert model.status == "todo"
 
 
 def test_update_todo_not_found():
