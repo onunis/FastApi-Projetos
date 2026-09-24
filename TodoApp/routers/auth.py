@@ -1,3 +1,5 @@
+import os
+from dotenv import load_dotenv
 from datetime import timedelta, datetime, timezone
 from typing import Annotated
 from fastapi import APIRouter, Depends, HTTPException
@@ -10,12 +12,14 @@ from starlette import status
 from fastapi.security import OAuth2PasswordRequestForm, OAuth2PasswordBearer
 from jose import jwt, JWTError
 
+load_dotenv()
+
 router = APIRouter(
     prefix='/auth',
     tags=['auth']
 )
 
-SECRET_KEY = '951b344f8740d9a91209adea452f83e2a4d8e662cc6cf84cee81ef345a02290d'
+SECRET_KEY = os.getenv("SECRET_KEY")
 ALGORITHM = 'HS256'
 
 
