@@ -26,14 +26,17 @@ def test_read_one_authenticated(test_todo):
     response = client.get("/todo/1")
 
     assert response.status_code == status.HTTP_200_OK
-    assert response.json() == {
-            'title': "Learn to code!",
-            'description': "Need to learn everyday!",
-            'priority':5,
-            'status':'todo',
-            'id':1,
-            'owner_id':1
-        }
+    
+    todo = response.json()
+
+    assert todo['title'] == "Learn to code!"
+    assert todo['description'] == "Need to learn everyday!"
+    assert todo['priority'] == 5
+    assert todo['status'] == 'todo'
+    assert todo['id'] == 1
+    assert todo['owner_id'] == 1
+    assert todo['created_at'] is not None
+    assert todo['updated_at'] is not None
 
 
 def test_read_one_not_authenticated(test_todo):
