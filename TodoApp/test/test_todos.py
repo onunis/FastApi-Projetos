@@ -10,16 +10,20 @@ app.dependency_overrides[get_current_user] = override_get_current_user
 def test_read_all_authenticated(test_todo):
     response = client.get("/")
     assert response.status_code == status.HTTP_200_OK
-    assert response.json() == [
-        {
-            'title': "Learn to code!",
-            'description': "Need to learn everyday!",
-            'priority':5,
-            'status':'todo',
-            'id':1,
-            'owner_id':1
-        }
-    ]
+
+    todos = response.json()
+    assert len(todos) == 1
+
+    todo = todos[0]
+
+    assert todo['title'] == "Learn to code!"
+    assert todo['description'] == "Need to learn everyday!"
+    assert todo['priority'] == 5
+    assert todo['status'] == 'todo'
+    assert todo['id'] == 1
+    assert todo['owner_id'] == 1
+    assert todo['created_at'] is not None
+    assert todo['updated_at'] is not None
 
 
 def test_read_one_authenticated(test_todo):
