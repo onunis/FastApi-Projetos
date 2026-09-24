@@ -30,6 +30,12 @@ class TodoStatus(str, Enum):
     IN_PROGRESS = "in_progress"
     DONE = "done"
 
+class TodoUpdateRequest(BaseModel):
+    title: str = Field(min_length=3)
+    description: str = Field(min_length=3, max_length=100)
+    priority: int = Field(gt=0, lt=6)
+
+
 class TodoRequest(BaseModel):
 
     title: str = Field(min_length=3)
@@ -72,7 +78,7 @@ async def create_todo(user: user_dependency, db: db_dependency, todo_request: To
 
 
 @router.put("/todo/{todo_id}", status_code=status.HTTP_204_NO_CONTENT)
-async def update_date(user: user_dependency, db: db_dependency, todo_request: TodoRequest, todo_id: int = Path(gt=0)):
+async def update_todo(user: user_dependency, db: db_dependency, todo_request: TodoUpdateRequest, todo_id: int = Path(gt=0)):
     if user is None:
         raise HTTPException(status_code=401, detail="Authentication Failed")
 
@@ -83,7 +89,6 @@ async def update_date(user: user_dependency, db: db_dependency, todo_request: To
     todo_model.title = todo_request.title
     todo_model.description = todo_request.description
     todo_model.priority = todo_request.priority
-    todo_model.status = todo_request.status
 
     db.add(todo_model)
     db.commit()
