@@ -158,3 +158,29 @@ def test_update_todo_invalid_status(test_todo):
     )
 
     assert response.status_code == status.HTTP_422_UNPROCESSABLE_ENTITY
+
+
+def test_read_filter_by_status(test_todo):
+    db  = TestingSessionLocal()
+
+    done_todo = Todos(
+        title="Finished task",
+        description="This task is finished",
+        priority=3,
+        status="done",
+        owner_id=1
+    )
+
+    db.add(done_todo)
+    db.commit()
+
+    response = client.get("/?status=done")
+
+    assert response.status_code == status.HTTP_200_OK
+
+    todos = response.json()
+
+    assert len(todos) == 1
+    assert todos[0]["status"] == "done"
+    assert todos[0]["title"] == "Finished task"
+
