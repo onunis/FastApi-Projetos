@@ -184,3 +184,9 @@ def test_read_filter_by_status(test_todo):
     assert todos[0]["status"] == "done"
     assert todos[0]["title"] == "Finished task"
 
+
+def test_read_all_invalid_status():
+    response = client.get("/?status=banana")
+
+    assert response.status_code == status.HTTP_422_UNPROCESSABLE_CONTENT
+

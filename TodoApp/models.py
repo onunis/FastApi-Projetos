@@ -1,5 +1,6 @@
 from database import Base
-from sqlalchemy import Column, Integer, String, Boolean, ForeignKey
+from sqlalchemy import Column, Integer, String, Boolean, ForeignKey, DateTime
+from datetime import datetime
 
 
 class Users(Base):
@@ -24,4 +25,4 @@ class Todos(Base):
     priority = Column(Integer)
     status = Column(String, default="todo")
     owner_id = Column(Integer, ForeignKey("users.id"))
-
+    created_at = Column(DateTime, default=datetime.now)
