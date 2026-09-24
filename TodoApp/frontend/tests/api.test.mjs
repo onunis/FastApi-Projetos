@@ -13,6 +13,15 @@ test('login usa formulário, não envia Bearer nem senha em URL', async () => {
   assert.equal(new URLSearchParams(call[1].body).get('password'), 'a&b+c');
   assert.equal(call[1].headers['Content-Type'], 'application/x-www-form-urlencoded');
 });
+test('cadastro envia JSON sem Bearer e conserva todos os campos', async () => {
+  let call;
+  const api = createApi({ getToken: () => 'token-antigo', onUnauthorized() {}, fetcher: async (...args) => { call = args; return new Response(null, { status: 201 }); } });
+  const account = { username: 'guilherme', email: 'gui@example.com', first_name: 'Gui', last_name: 'Silva', password: 'segredo', phone_number: '11999999999' };
+  await api.register(account);
+  assert.equal(call[0], '/api/auth/');
+  assert.equal(call[1].headers.Authorization, undefined);
+  assert.deepEqual(JSON.parse(call[1].body), account);
+});
 test('contratos: listar, criar, editar sem status, mover, excluir e respostas vazias', async () => {
   const calls = [];
   const api = createApi({ getToken: () => 'jwt-test', onUnauthorized() {}, fetcher: async (url, options) => { calls.push({ url, ...options }); return new Response(null, { status: 204 }); } });

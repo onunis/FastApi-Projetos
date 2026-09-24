@@ -1,0 +1,7 @@
+.error:empty,
+.success:empty { display: none; }
+.success { color: #587748; background: #edf4e8; border-radius: 7px; padding: 10px 12px; font-size: 12px; line-height: 1.5; margin: 14px 0; }
+.login-form-wrap .create-account { margin-top: 10px; }
+.form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.form-row label { margin-top: 24px; }
+@media (max-width: 550px) { .form-row { grid-template-columns: 1fr; gap: 0; } }

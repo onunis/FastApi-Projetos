@@ -24,8 +24,9 @@ function activateSession() {
   return true;
 }
 function controls() {
-  for (const id of ['new-task', 'refresh', 'save-task', 'confirm-delete']) $(id).disabled = busy;
+  for (const id of ['new-task', 'refresh', 'save-task', 'confirm-delete', 'create-account', 'register-submit']) $(id).disabled = busy;
   $('task-form').querySelectorAll('input,textarea,select').forEach(el => { el.disabled = busy; });
+  $('register-form').querySelectorAll('input,button').forEach(el => { el.disabled = busy; });
 }
 function render() {
   const query = $('search').value.trim().toLocaleLowerCase('pt-BR');
@@ -107,10 +108,22 @@ function openTask(task) {
 function openDelete(task) { deletingId = task.id; message('delete-error'); $('delete-description').textContent = `A tarefa “${task.title}” será excluída.`; $('delete-dialog').showModal(); $('cancel-delete').focus(); }
 function move(task, status) { if (status !== task.status) mutate(() => api.move(task.id, status), `Tarefa movida para ${labels[status]}.`, 'board-error'); }
 $('login-form').addEventListener('submit', async e => {
-  e.preventDefault(); message('login-error'); $('login-submit').disabled = true; $('login-submit').textContent = 'Entrando...';
+  e.preventDefault(); message('login-error'); message('login-message'); $('login-submit').disabled = true; $('login-submit').textContent = 'Entrando...';
   try { const data = await api.login($('username').value.trim(), $('password').value); if (!decodeSession(data?.access_token || '')) throw new Error('A API retornou uma sessão inválida.'); saveToken(data.access_token); generation++; $('password').value = ''; if (activateSession()) await reload(); }
   catch (error) { message('login-error', error.message); }
   finally { $('login-submit').disabled = false; $('login-submit').textContent = 'Entrar no meu quadro →'; }
+});
+$('create-account').onclick = () => { message('register-error'); $('register-form').reset(); $('register-username').value = $('username').value.trim(); $('register-dialog').showModal(); $('register-first-name').focus(); };
+$('register-form').addEventListener('submit', async e => {
+  e.preventDefault(); message('register-error'); busy = true; controls(); $('register-submit').textContent = 'Criando...';
+  const account = { first_name: $('register-first-name').value.trim(), last_name: $('register-last-name').value.trim(), username: $('register-username').value.trim(), email: $('register-email').value.trim(), phone_number: $('register-phone').value.trim(), password: $('register-password').value };
+  try {
+    await api.register(account);
+    const data = await api.login(account.username, account.password);
+    if (!decodeSession(data?.access_token || '')) throw new Error('A API retornou uma sessão inválida.');
+    saveToken(data.access_token); $('register-dialog').close(); $('register-form').reset(); generation++; if (activateSession()) await reload();
+  } catch (error) { message('register-error', error.message.includes('(500)') ? 'Não foi possível criar a conta. Confira se usuário ou e-mail já estão em uso.' : error.message); }
+  finally { busy = false; $('register-submit').textContent = 'Criar e entrar'; controls(); }
 });
 $('task-form').addEventListener('submit', e => {
   e.preventDefault(); const data = { title: $('task-title').value.trim(), description: $('task-description').value.trim(), priority: Number($('task-priority').value) };
@@ -121,7 +134,8 @@ $('task-form').addEventListener('submit', e => {
 $('delete-form').addEventListener('submit', e => { e.preventDefault(); const id = deletingId; mutate(() => api.remove(id), 'Tarefa excluída.', 'delete-error', () => $('delete-dialog').close()); });
 for (const id of ['close-dialog', 'cancel-dialog']) $(id).onclick = () => { if (!busy) $('task-dialog').close(); };
 $('cancel-delete').onclick = () => { if (!busy) $('delete-dialog').close(); };
-for (const id of ['task-dialog', 'delete-dialog']) $(id).addEventListener('cancel', e => { if (busy) e.preventDefault(); });
+for (const id of ['close-register', 'cancel-register']) $(id).onclick = () => { if (!busy) $('register-dialog').close(); };
+for (const id of ['task-dialog', 'delete-dialog', 'register-dialog']) $(id).addEventListener('cancel', e => { if (busy) e.preventDefault(); });
 $('new-task').onclick = () => openTask(); $('refresh').onclick = reload; $('search').oninput = render; $('logout').onclick = () => logout();
 document.addEventListener('visibilitychange', () => { if (!document.hidden && token && !decodeSession(token)) logout('Sua sessão expirou. Entre novamente.'); });
 if (activateSession()) reload();

@@ -8,6 +8,7 @@ const assets = new Map([
   ['/app.js', ['app.js', 'text/javascript; charset=utf-8']],
   ['/api.js', ['api.js', 'text/javascript; charset=utf-8']],
   ['/styles.css', ['styles.css', 'text/css; charset=utf-8']],
+  ['/register.css', ['register.css', 'text/css; charset=utf-8']],
 ]);
 export function createServer(backend = 'http://127.0.0.1:8000') {
   const origin = new URL(backend);
@@ -17,7 +18,7 @@ export function createServer(backend = 'http://127.0.0.1:8000') {
     res.setHeader('Content-Security-Policy', "default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data:; connect-src 'self'; frame-ancestors 'none'; base-uri 'none'; form-action 'self'");
     if (req.url.startsWith('/api/')) {
       const path = req.url.slice(4);
-      if (!/^\/(?:\?|$|auth\/token(?:\?|$)|todo(?:\/\d+(?:\/status)?)?(?:\?|$))/.test(path)) {
+      if (!/^\/(?:\?|$|auth\/?(?:token)?(?:\?|$)|todo(?:\/\d+(?:\/status)?)?(?:\?|$))/.test(path)) {
         res.writeHead(404).end(); return;
       }
       if (req.headers.origin && req.headers.origin !== `http://${req.headers.host}`) {

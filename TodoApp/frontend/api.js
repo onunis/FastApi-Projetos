@@ -31,6 +31,7 @@ export function createApi({ getToken, onUnauthorized, fetcher = fetch }) {
   }
   const json = (method, body) => ({ method, headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body) });
   return {
+    register: account => request('/auth/', json('POST', account), false),
     login: (username, password) => request('/auth/token', { method: 'POST', headers: { 'Content-Type': 'application/x-www-form-urlencoded' }, body: new URLSearchParams({ username, password }).toString() }, false),
     list: () => request('/'),
     create: task => request('/todo', json('POST', { ...taskContent(task), status: 'todo' })),

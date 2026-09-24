@@ -61,5 +61,5 @@ def asset(filename):
     return serve
 
 
-for filename in ("styles.css", "app.js", "api.js"):
+for filename in ("styles.css", "register.css", "app.js", "api.js"):
     app.add_api_route("/" + filename, asset(filename), include_in_schema=False)
